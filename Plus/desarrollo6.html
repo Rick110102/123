@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plus - Impulsando tu carrera</title>
+    <style>
+        /* Estilos básicos */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Estilo para el banner */
+        header.banner {
+            background-color: #ffcc00;
+            color: #1a1a1a;
+            padding: 20px;
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: bold;
+            font-family: 'Arial Black', sans-serif;
+            position: relative;
+        }
+
+        header.banner img.logo {
+            position: middle;
+            top: 10px;
+            left: 10px;
+            height: auto; /* Permite que la altura sea automática */
+            width: 300px; /* Puedes ajustar el tamaño según lo necesites */
+            max-width: 100%; /* Para que no se desborde del contenedor */
+            border-radius: 5px;
+        }
+
+
+        header.banner h1, header.banner p {
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        /* Sección de iconos */
+        .icon-section {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 20px 0;
+        }
+
+        .icon {
+            background-color: #333333;
+            border: 2px solid #ffcc00;
+            border-radius: 10px;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .icon:hover {
+            background-color: #ffcc00;
+            color: #1a1a1a;
+            transform: scale(1.05);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Secciones de contenido */
+        .section {
+            display: none;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            background-color: #2e2e2e;
+            border-radius: 10px;
+            min-height: 400px;
+            border: 1px solid #ffcc00;
+            font-size: 1em;
+        }
+
+        .section h2 {
+            color: #ffcc00;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+            transition: text-shadow 0.3s;
+        }
+
+        .section h2:hover {
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Detalles del curso */
+        .course-details {
+            background-color: #1a1a1a;
+            border: 1px solid #ffcc00;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            text-align: left;
+            font-size: 0.9em;
+        }
+
+        .course-image,
+        .course-pdf {
+            border: 1px dashed #ffcc00;
+            padding: 10px;
+            margin: 10px 0;
+            color: #ffcc00;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        /* Botones de acción para los cursos */
+        button,
+        .register-button {
+            background-color: #ffcc00;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover,
+        .register-button:hover {
+            background-color: #ffdb4d;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333333;
+            color: #ffcc00;
+            text-align: center;
+            padding: 10px;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+<header class="banner">
+    <img src="Logo2.png" alt="123" class="logo">
+    <p>Impulsando tu carrera</p>
+</header>
+<div class="icon-section">
+    <div class="icon" onclick="showSection('inicio')">
+        <h3>Inicio</h3>
+        <p>Página de Inicio</p>
+    </div>
+    <div class="icon" onclick="showSection('cursos')">
+        <h3>Cursos</h3>
+        <p>Explora nuestros cursos</p>
+    </div>
+    <div class="icon" onclick="showSection('certificado')">
+        <h3>Certifícate</h3>
+        <p>Obtén tu certificación</p>
+    </div>
+</div>
+
+<div id="inicio" class="section">
+    <h2>¡Bienvenido a Plus!</h2>
+    <p>Aquí, impulsamos tu desarrollo profesional con cursos prácticos y programas especializados para diversas carreras. Nuestro objetivo es llevarte del conocimiento a la acción, brindándote herramientas efectivas para transformar tu futuro. Únete a una experiencia de aprendizaje que potencia tus habilidades y abre nuevas oportunidades para tu crecimiento profesional.</p>
+</div>
+
+<div id="cursos" class="section">
+    <h2>Nuestros Cursos</h2>
+    <div>
+        <h3>Python: Aplicaciones Básicas</h3>
+        <button onclick="showCourseDetails('python')">Ver detalles del curso</button>
+    </div>
+    <div style="margin-top: 20px;">
+        <h3>Introducción y Desarrollo de Estudios Ambientales con Google Earth Engine</h3>
+        <button onclick="showCourseDetails('gee')">Ver detalles del curso</button>
+    </div>
+</div>
+
+<div id="certificado" class="section">
+    <h2>Certificación</h2>
+    <p>¡Obtén tu certificado y destaca tus logros profesionales con Plus! Al completar nuestros cursos, recibirás una certificación que respalda tus conocimientos y habilidades prácticas. ¡No dejes pasar esta oportunidad para impulsar tu carrera! Puedes ver una muestra de certificado aquí.</p>
+    <div class="course-image">
+        <img src="Certificado.png" alt="Modelo de Certificado" style="max-width: 100%; height: auto;">
+    </div>
+</div>
+
+
+<div id="course-details" class="section">
+    <h2>Detalles del Curso</h2>
+    <div id="python-details" class="course-details" style="display: none;">
+        <p><strong>Docente:</strong> Harol Rueda</p>
+        <p><strong>Duración del curso:</strong> 2 semanas (Lunes, miércoles y viernes/ 8 a 10 p.m.)</p>
+        <p><strong>Sesiones de tutoría:</strong> Todos los sábados, de 8 a 9 p.m.</p>
+    </div>
+    <div id="gee-details" class="course-details" style="display: none;">
+        <p><strong>Docente:</strong> Ricardo Valverde</p>
+        <p><strong>Duración del curso:</strong> 2 semanas (Lunes, viernes y sábado/ 8 a 10 a.m.)</p>
+        <p><strong>Sesiones de tutoría:</strong> Todos los sábados, de 7 a 8 p.m.</p>
+    </div>
+    <div class="course-image">Aquí puedes subir la imagen del curso</div>
+    <div class="course-pdf">Aquí puedes subir el PDF del curso</div>
+    <button class="register-button" onclick="register()">Regístrate</button>
+    <button onclick="showSection('cursos')">Volver a Cursos</button>
+</div>
+
+<footer>
+    <p>&copy; 2024 Plus - Impulsamos tu desarrollo profesional</p>
+</footer>
+
+<script>
+    function showSection(section) {
+        document.getElementById("inicio").style.display = "none";
+        document.getElementById("cursos").style.display = "none";
+        document.getElementById("certificado").style.display = "none";
+        document.getElementById("course-details").style.display = "none";
+        document.getElementById(section).style.display = "block";
+    }
+
+    function showCourseDetails(course) {
+        showSection('course-details');
+        document.getElementById("python-details").style.display = course === 'python' ? 'block' : 'none';
+        document.getElementById("gee-details").style.display = course === 'gee' ? 'block' : 'none';
+    }
+
+    function register() {
+        window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSdfJP25Yvl4pV8eR04R1Gf_gULOulIhA3f2Xy7Nf9q3_Qib7w/viewform"; // Coloca el enlace al formulario de Google Forms aquí
+    }
+
+    // Mostrar la sección de inicio al cargar la página
+    showSection('inicio');
+</script>
+
+</body>
+</html>
