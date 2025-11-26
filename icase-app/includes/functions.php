@@ -150,9 +150,17 @@ function subirImagen($file, $carpeta = 'observaciones') {
         return ['success' => false, 'error' => 'Tipo de archivo no permitido. Solo: ' . implode(', ', ALLOWED_EXTENSIONS)];
     }
 
+    // Verificar y crear directorio si no existe
+    $directorioDestino = UPLOAD_PATH . $carpeta . '/';
+    if (!is_dir($directorioDestino)) {
+        if (!mkdir($directorioDestino, 0755, true)) {
+            return ['success' => false, 'error' => 'No se pudo crear el directorio de uploads'];
+        }
+    }
+
     // Generar nombre único
     $nombreArchivo = uniqid() . '_' . time() . '.' . $extension;
-    $rutaDestino = UPLOAD_PATH . $carpeta . '/' . $nombreArchivo;
+    $rutaDestino = $directorioDestino . $nombreArchivo;
 
     // Mover archivo
     if (move_uploaded_file($file['tmp_name'], $rutaDestino)) {
@@ -162,7 +170,7 @@ function subirImagen($file, $carpeta = 'observaciones') {
             'url' => UPLOAD_URL . $carpeta . '/' . $nombreArchivo
         ];
     } else {
-        return ['success' => false, 'error' => 'Error al mover el archivo'];
+        return ['success' => false, 'error' => 'Error al mover el archivo. Verifica los permisos del directorio.'];
     }
 }
 

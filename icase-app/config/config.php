@@ -12,7 +12,10 @@ define('DB_NAME', 'icase_system');
 
 // Configuración de Rutas
 define('BASE_URL', 'http://localhost/icase-app/'); // Cambiar a tu dominio de Hostinger
-define('UPLOAD_PATH', __DIR__ . '/../assets/uploads/');
+
+// Ruta absoluta al directorio raíz de la aplicación
+define('APP_ROOT', dirname(__DIR__) . '/');
+define('UPLOAD_PATH', APP_ROOT . 'assets/uploads/');
 define('UPLOAD_URL', BASE_URL . 'assets/uploads/');
 
 // Configuración de Sesión
