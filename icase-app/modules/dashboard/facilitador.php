@@ -169,7 +169,9 @@ while ($item = $items_result->fetch_assoc()) {
                     <h3>Comparativa ICASE - <?php echo obtenerNombreMes($mes) . ' ' . $anio; ?></h3>
                 </div>
                 <div class="card-body">
-                    <canvas id="chartIcase"></canvas>
+                    <div class="chart-container chart-icase-compare">
+                        <canvas id="chartIcase"></canvas>
+                    </div>
                 </div>
             </div>
             <?php endif; ?>
@@ -182,7 +184,9 @@ while ($item = $items_result->fetch_assoc()) {
                     <h3>Comparativa: <?php echo htmlspecialchars($item_comp['item_nombre']); ?></h3>
                 </div>
                 <div class="card-body">
-                    <canvas id="chartItem<?php echo $index; ?>"></canvas>
+                    <div class="chart-container">
+                        <canvas id="chartItem<?php echo $index; ?>"></canvas>
+                    </div>
                 </div>
             </div>
             <?php endif; ?>
@@ -192,8 +196,11 @@ while ($item = $items_result->fetch_assoc()) {
 
     <script src="../../assets/js/main.js"></script>
     <script>
-        // Gráfico comparativo ICASE
+        // Gráfico comparativo ICASE (con colores dinámicos)
         <?php if (!empty($socios_icase)): ?>
+        const icaseData = [<?php echo implode(',', array_column($socios_icase, 'icase')); ?>];
+        const icaseColors = getColorsArrayByPerformance(icaseData);
+
         const ctxIcase = document.getElementById('chartIcase').getContext('2d');
         new Chart(ctxIcase, {
             type: 'bar',
@@ -201,14 +208,15 @@ while ($item = $items_result->fetch_assoc()) {
                 labels: [<?php echo "'" . implode("','", array_column($socios_icase, 'nombre')) . "'"; ?>],
                 datasets: [{
                     label: 'ICASE',
-                    data: [<?php echo implode(',', array_column($socios_icase, 'icase')); ?>],
-                    backgroundColor: 'rgba(52, 152, 219, 0.7)',
-                    borderColor: 'rgba(52, 152, 219, 1)',
+                    data: icaseData,
+                    backgroundColor: icaseColors.backgrounds,
+                    borderColor: icaseColors.borders,
                     borderWidth: 2
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -217,37 +225,67 @@ while ($item = $items_result->fetch_assoc()) {
                             callback: function(value) { return value + '%'; }
                         }
                     }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'ICASE: ' + context.parsed.y + '%';
+                            }
+                        }
+                    }
                 }
             }
         });
         <?php endif; ?>
 
-        // Gráficos por ítem
+        // Gráficos por ítem (con colores dinámicos)
         <?php foreach ($comparativa_items as $index => $item_comp): ?>
         <?php if (!empty($item_comp['socios'])): ?>
-        new Chart(document.getElementById('chartItem<?php echo $index; ?>').getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: [<?php echo "'" . implode("','", array_column($item_comp['socios'], 'nombre')) . "'"; ?>],
-                datasets: [{
-                    label: 'Porcentaje',
-                    data: [<?php echo implode(',', array_column($item_comp['socios'], 'porcentaje')); ?>],
-                    backgroundColor: 'rgba(46, 204, 113, 0.7)',
-                    borderColor: 'rgba(46, 204, 113, 1)',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: { callback: function(value) { return value + '%'; } }
+        (function() {
+            const itemData<?php echo $index; ?> = [<?php echo implode(',', array_column($item_comp['socios'], 'porcentaje')); ?>];
+            const itemColors<?php echo $index; ?> = getColorsArrayByPerformance(itemData<?php echo $index; ?>);
+
+            new Chart(document.getElementById('chartItem<?php echo $index; ?>').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: [<?php echo "'" . implode("','", array_column($item_comp['socios'], 'nombre')) . "'"; ?>],
+                    datasets: [{
+                        label: 'Porcentaje',
+                        data: itemData<?php echo $index; ?>,
+                        backgroundColor: itemColors<?php echo $index; ?>.backgrounds,
+                        borderColor: itemColors<?php echo $index; ?>.borders,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { callback: function(value) { return value + '%'; } }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Cumplimiento: ' + context.parsed.y + '%';
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        });
+            });
+        })();
         <?php endif; ?>
         <?php endforeach; ?>
     </script>

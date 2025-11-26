@@ -243,7 +243,9 @@ for ($i = 11; $i >= 0; $i--) {
                     <h3>Desempeño por Ítems - <?php echo obtenerNombreMes($mes) . ' ' . $anio; ?></h3>
                 </div>
                 <div class="card-body">
-                    <canvas id="chartItems"></canvas>
+                    <div class="chart-container chart-items">
+                        <canvas id="chartItems"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -254,7 +256,9 @@ for ($i = 11; $i >= 0; $i--) {
                     <h3>Evolución del ICASE</h3>
                 </div>
                 <div class="card-body">
-                    <canvas id="chartEvolucion"></canvas>
+                    <div class="chart-container chart-evolution">
+                        <canvas id="chartEvolucion"></canvas>
+                    </div>
                 </div>
             </div>
             <?php endif; ?>
@@ -263,8 +267,19 @@ for ($i = 11; $i >= 0; $i--) {
 
     <script src="../../assets/js/main.js"></script>
     <script>
-        // Gráfico de desempeño por ítems
+        // Gráfico de desempeño por ítems (HORIZONTAL con colores dinámicos)
         <?php if (!empty($porcentajes_items)): ?>
+        const itemsData = [<?php
+            $data = [];
+            foreach ($porcentajes_items as $item) {
+                if (!$item['es_na']) {
+                    $data[] = $item['porcentaje'];
+                }
+            }
+            echo implode(',', $data);
+        ?>];
+        const itemsColors = getColorsArrayByPerformance(itemsData);
+
         const ctxItems = document.getElementById('chartItems').getContext('2d');
         new Chart(ctxItems, {
             type: 'bar',
@@ -280,17 +295,60 @@ for ($i = 11; $i >= 0; $i--) {
                 ?>],
                 datasets: [{
                     label: 'Porcentaje de Cumplimiento',
-                    data: [<?php
-                        $data = [];
-                        foreach ($porcentajes_items as $item) {
-                            if (!$item['es_na']) {
-                                $data[] = $item['porcentaje'];
+                    data: itemsData,
+                    backgroundColor: itemsColors.backgrounds,
+                    borderColor: itemsColors.borders,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                indexAxis: 'y', // Esto hace el gráfico horizontal
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
                             }
                         }
-                        echo implode(',', $data);
-                    ?>],
-                    backgroundColor: 'rgba(52, 152, 219, 0.7)',
-                    borderColor: 'rgba(52, 152, 219, 1)',
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Cumplimiento: ' + context.parsed.x + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        <?php endif; ?>
+
+        // Gráfico de evolución del ICASE (con colores dinámicos)
+        <?php if (!empty($icases_evolucion)): ?>
+        const evolucionData = [<?php echo implode(',', array_column($icases_evolucion, 'icase')); ?>];
+        const evolucionColors = getColorsArrayByPerformance(evolucionData);
+
+        const ctxEvolucion = document.getElementById('chartEvolucion').getContext('2d');
+        new Chart(ctxEvolucion, {
+            type: 'bar',
+            data: {
+                labels: [<?php
+                    echo "'" . implode("','", array_column($icases_evolucion, 'label')) . "'";
+                ?>],
+                datasets: [{
+                    label: 'ICASE',
+                    data: evolucionData,
+                    backgroundColor: evolucionColors.backgrounds,
+                    borderColor: evolucionColors.borders,
                     borderWidth: 2
                 }]
             },
@@ -307,38 +365,15 @@ for ($i = 11; $i >= 0; $i--) {
                             }
                         }
                     }
-                }
-            }
-        });
-        <?php endif; ?>
-
-        // Gráfico de evolución
-        <?php if (!empty($icases_evolucion)): ?>
-        const ctxEvolucion = document.getElementById('chartEvolucion').getContext('2d');
-        new Chart(ctxEvolucion, {
-            type: 'bar',
-            data: {
-                labels: [<?php
-                    echo "'" . implode("','", array_column($icases_evolucion, 'label')) . "'";
-                ?>],
-                datasets: [{
-                    label: 'ICASE',
-                    data: [<?php echo implode(',', array_column($icases_evolucion, 'icase')); ?>],
-                    backgroundColor: 'rgba(46, 204, 113, 0.7)',
-                    borderColor: 'rgba(46, 204, 113, 1)',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            callback: function(value) {
-                                return value + '%';
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'ICASE: ' + context.parsed.y + '%';
                             }
                         }
                     }

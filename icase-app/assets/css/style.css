@@ -690,8 +690,29 @@ table tr:hover {
    ============================================================================ */
 .chart-container {
     position: relative;
-    height: 300px;
+    height: 500px;
     margin: 20px 0;
+}
+
+/* Gráfico de ítems horizontal - más alto para mejor visualización */
+.chart-container.chart-items {
+    height: 600px;
+}
+
+/* Gráfico de evolución ICASE */
+.chart-container.chart-evolution {
+    height: 450px;
+}
+
+/* Gráfico comparativo ICASE */
+.chart-container.chart-icase-compare {
+    height: 500px;
+}
+
+/* Canvas responsive */
+.chart-container canvas {
+    max-width: 100%;
+    height: auto !important;
 }
 
 /* ============================================================================

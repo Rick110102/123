@@ -3,6 +3,49 @@
  */
 
 // ============================================================================
+// FUNCIONES PARA COLORES DINÁMICOS EN GRÁFICOS
+// ============================================================================
+
+/**
+ * Obtener color según porcentaje de desempeño
+ * Verde: >90%, Amarillo: 70-90%, Rojo: <70%
+ */
+function getColorByPerformance(value) {
+    if (value >= 90) {
+        return {
+            bg: 'rgba(46, 204, 113, 0.7)',    // Verde
+            border: 'rgba(46, 204, 113, 1)'
+        };
+    } else if (value >= 70) {
+        return {
+            bg: 'rgba(243, 156, 18, 0.7)',    // Amarillo
+            border: 'rgba(243, 156, 18, 1)'
+        };
+    } else {
+        return {
+            bg: 'rgba(231, 76, 60, 0.7)',     // Rojo
+            border: 'rgba(231, 76, 60, 1)'
+        };
+    }
+}
+
+/**
+ * Generar array de colores para múltiples valores
+ */
+function getColorsArrayByPerformance(values) {
+    const backgrounds = [];
+    const borders = [];
+
+    values.forEach(value => {
+        const color = getColorByPerformance(value);
+        backgrounds.push(color.bg);
+        borders.push(color.border);
+    });
+
+    return { backgrounds, borders };
+}
+
+// ============================================================================
 // SISTEMA DE NOTIFICACIONES CON TIMER DE 30 SEGUNDOS
 // ============================================================================
 class NotificationSystem {
